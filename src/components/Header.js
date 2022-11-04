@@ -1,13 +1,12 @@
 import React, { Fragment } from 'react'
 import lottie from 'lottie-web';
 import { defineElement } from 'lord-icon-element';
-// import { VideoCameraIcon, } from '@heroicons/react/24/outline'
-import { TvIcon, FilmIcon, VideoCameraIcon, CogIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid'
+import { TvIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid'
 import { useSelector } from 'react-redux';
 import { Menu, Transition } from '@headlessui/react';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 const Header = () => {
@@ -20,15 +19,12 @@ const Header = () => {
 
 
 
-    // const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    // const d = new Date("2021-03-25");
-    // let day = days[d.getDay()+1];
-    // console.log(day)
+
 
 
 
     return (
-        <div className=' sm:w-[90px]  mx-auto sm:mx-5 h-[60px]  sm:h-[97vh] w-full mobile:w-[90%] rounded-none mobile:rounded-2xl dark:bg-slate-800 flex my-0 mobile:my-3  items-center px-5 sm:px-0  justify-between flex-row sm:flex-col  sm:pt-5 '>
+        <div className=' sm:w-[90px]  mx-auto sm:mx-5 h-[60px]  sm:h-[97vh] w-full mobile:w-[90%] rounded-none mobile:rounded-2xl dark:bg-slate-800 bg-white flex my-0 mobile:my-3  items-center px-5 sm:px-0  justify-between flex-row sm:flex-col  sm:pt-5 '>
 
             <div className=' flex flex-row sm:flex-col items-center w-[90%]'>
                 <lord-icon
@@ -36,10 +32,9 @@ const Header = () => {
                     trigger="loop"
                     style={{ width: 70, height: 70, }}
                     colors="primary:#3a3347,secondary:#08a88a,tertiary:#ebe6ef"
-                    // state="loop"
                     delay="6000"
                     id='bi'
-                    onClick={()=>navigate('/')}
+                    onClick={() => navigate('/')}
                 >
                 </lord-icon>
 
@@ -49,11 +44,11 @@ const Header = () => {
                         trigger="hover"
                         id="mi"
                         colors="primary:#e4e4e4"
-                        onClick={()=>navigate('/')}
+                        onClick={() => navigate('/')}
                     ></lord-icon>
 
 
-                    <TvIcon id="mi"  onClick={() => navigate('/discover_tv')} />
+                    <TvIcon id="mi" onClick={() => navigate('/discover_tv')} />
 
                     <lord-icon
                         src="https://cdn.lordicon.com/eanmttmw.json"
@@ -75,9 +70,7 @@ const Header = () => {
                 <div>
                     <Menu.Button className='flex items-center focus:outline-none'>
                         <div className=' flex items-center'>
-
-                            <img src={user.photoURL} className='mobile:w-10 mobile:h-10 h-9 w-9 rounded-full ring-2 my-0 sm:my-9' alt="userPhoto" />
-
+                            {<img src={user.photoURL} className='mobile:w-10 mobile:h-10 h-9 w-9 rounded-full ring-2 my-0 sm:my-9' alt="userPhoto" />}
                         </div>
 
 
@@ -95,18 +88,6 @@ const Header = () => {
                     <Menu.Items className="absolute z-10 -ml-32 mobile:-ml-28 mt-6  sm:-mt-24  sm:ml-16 w-44 origin-top-right divide-y divide-gray-100 rounded-md dark:divide-black dark:bg-slate-800 bg-white shadow-lg ring-1 ring-black ring-opacity-5 border-[0.5px] dark:border-black focus:outline-none">
 
                         <div className="py-1">
-                            <Menu.Item>
-                                {({ active }) => (
-                                    <p
-
-                                        className={classNames(
-                                            active ? 'bg-gray-100 dark:bg-gray-900 dark:text-slate-100 text-gray-900  cursor-pointer flex justify-between' : 'text-gray-700 dark:text-slate-100 cursor-pointer flex justify-between', 'block px-4 py-2 text-sm  cursor-pointer'
-                                        )}
-                                    >
-                                        <CogIcon className=' w-5 inline' />      Settings
-                                    </p>
-                                )}
-                            </Menu.Item>
                             <Menu.Item >
                                 {({ active }) => (
 

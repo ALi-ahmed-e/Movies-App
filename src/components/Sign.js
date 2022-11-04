@@ -11,24 +11,9 @@ const Sign = () => {
     const dispatch = useDispatch()
     const { SignIn } = AuthAction
     const navigate = useNavigate()
+    
     const signin = () => {
-        signInWithPopup(auth, provider)
-            .then((result) => {
-
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-
-                const user = result.user;
-                consignin(user)
-
-            }).catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                const email = error.customData.email;
-
-                const credential = GoogleAuthProvider.credentialFromError(error);
-                console.log(error)
-            });
+        signInWithPopup(auth, provider).then((result) => {consignin(result.user)}).catch((error) =>console.log(error));
 
         const consignin = async (user) => {
 
@@ -51,6 +36,7 @@ const Sign = () => {
 
                 localStorage.setItem('user', JSON.stringify(docSnap.data()))
                 dispatch(SignIn(docSnap.data()))
+                window.location.reload()
                 navigate('/')
             } else {
 
@@ -62,6 +48,7 @@ const Sign = () => {
 
                 localStorage.setItem('user', JSON.stringify(docSnap.data()))
                 dispatch(SignIn(docSnap.data()))
+                window.location.reload()
                 navigate('/')
             }
 
