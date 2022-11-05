@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react'
 
 import useRefreshUser from './useRefreshUser';
-import { CalendarIcon, MagnifyingGlassIcon, XCircleIcon } from '@heroicons/react/24/outline'
-import { ArrowRightIcon } from '@heroicons/react/24/solid';
+import { BookmarkIcon, CalendarIcon, MagnifyingGlassIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import { ArrowRightIcon, BookmarkSlashIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
 import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,6 +29,7 @@ const List = ({ mode }) => {
     const [Recommended, setRecommended] = useState();
     const [Trending, setTrending] = useState();
     const [hide, sethide] = useState();
+    const [clr, setclr] = useState('hidden');
     let pagenum = 1
 
 
@@ -141,12 +142,16 @@ const List = ({ mode }) => {
         sethide('hidden')
         setRecommended()
         setTrending()
-        getListData(e.target.value.value, 'search')
+        getListData(e.target.searchRef.value, 'search')
     }
 
     const clrsrch = () => {
         detectmode()
     }
+
+    // const not = (e)=>{
+        
+    // }
 
     return (
         <div className='w-full overflow-x-hidden mc'>
@@ -155,8 +160,8 @@ const List = ({ mode }) => {
             {mode !== 'Bookmarked' && <form onSubmit={e => searchmovies(e)} className='  flex sm:ml-0 ml-12  w-fit px-2 py-1 my-4 items-center '>
 
                 <MagnifyingGlassIcon className='w-7 h-7 dark:text-white mx-1' />
-                <input name='value' type="text" className=' px-5 py-1 bg-transparent  outline-none dark:text-white ' placeholder='Search for shows' />
-                <XCircleIcon className=' w-6 h-6 text-white cursor-pointer' onClick={clrsrch} />
+                <input onChange={(e) => { e.target.value ? setclr('') : setclr('hidden') }} name={'searchRef'} type="text" className=' px-5 py-1 bg-transparent  outline-none dark:text-white ' placeholder='Search for shows' />
+                <XCircleIcon className={`' w-6 h-6 text-white cursor-pointer' ${clr}`} onClick={clrsrch} />
             </form>}
 
 
@@ -194,26 +199,21 @@ const List = ({ mode }) => {
                     modules={[FreeMode, Pagination]}
                     className="mySwiper"
                 >
-                    {movies.map(movie => <SwiperSlide onClick={() => gotoMovie(movie)} key={Math.random()} ><div key={Math.random()} className='block  mx-auto my-10  w-56 h-[126.17px]'>
+                    {movies.map(movie => <SwiperSlide onClick={(e) =>e.target.id != 'si'&&gotoMovie(movie)} key={Math.random()} ><div key={Math.random()} className='block  mx-auto my-10  w-56 h-[126.17px]'>
                         <div className='flex  h-full ' style={{ 'direction': 'rtl' }}>
                             <img src={`https://image.tmdb.org/t/p/w300` + movie.backdrop_path} className=' rounded-[10px] w-56 ' />
-                            <div onClick={() => savebtn(movie)} className=' bg-black/50 cursor-pointer hover:bg-black/70 z-30 transition-all rounded-full m-2 absolute px-[7px] py-[7px]  flex items-center justify-center'>
-                                <lord-icon
-                                    src={user.savesId != '' ? user.savesId.includes(movie.id) ? "https://cdn.lordicon.com/eanmttmw.json" : "https://cdn.lordicon.com/gigfpovs.json" : "https://cdn.lordicon.com/gigfpovs.json"}
-
-                                    trigger="hover"
-                                    colors="primary:#fff"
-                                    id="si"></lord-icon>
+                            <div id="si"  onClick={() => savebtn(movie)} className=' bg-black/50 cursor-pointer hover:bg-black/70 z-30 transition-all rounded-full m-2 absolute px-[7px] py-[7px]  flex items-center justify-center'>
+                            {user.savesId != '' ? user.savesId.includes(movie.id) ? <BookmarkSlashIcon id="si"  className='si'/> : <BookmarkIcon id="si"  className='si'/> : <BookmarkIcon id="si"  className='si'/>}
 
                             </div>
 
                             <div className='   transition-all rounded-[10px] -z-0  w-56 h-[126.17px] absolute'>
-                                <p className='dark:text-white absolute text-xs z-30 flex bg-black/10  mr-[150px] mt-2 px-2 py-1 rounded-md'> <CalendarIcon className='w-4 mx-1' />{mode == 'home' ? movie.release_date.slice(0, 4) : movie.first_air_date}</p>
+                                <p className='dark:text-white absolute text-xs z-30 flex bg-black/10  mr-[150px] mt-2 px-2 py-1 rounded-md'> <CalendarIcon className='w-4 mx-1' />{mode == 'home' ? movie.release_date.slice(0, 4) :mode == 'tv' && movie.first_air_date.slice(0, 4)}</p>
 
                             </div>
                         </div>
                         <div className='flex -mt-12 ml-4'>
-                            <p className='dark:text-white strokee'>{mode == 'home' ? movie.title : mode == 'search' ? movie.title : movie.name}</p>
+                            <p className='dark:text-white strokee'>{mode == 'home' ? movie.title : movie.name}</p>
                         </div>
 
                     </div></SwiperSlide>)}
@@ -236,12 +236,10 @@ const List = ({ mode }) => {
                         <div className='flex w-full h-full' style={{ 'direction': 'rtl' }}>
                             <img src={`https://image.tmdb.org/t/p/w300` + movie.backdrop_path} className=' rounded-[10px] w-56' />
                             <div onClick={() => savebtn(movie)} className=' bg-black/50 hover:bg-black/70 z-30 transition-all rounded-full m-2 absolute px-[7px] py-[7px] cursor-pointer flex items-center justify-center'>
-                                <lord-icon
-                                    src={user.savesId != '' ? user.savesId.includes(movie.id) ? "https://cdn.lordicon.com/eanmttmw.json" : "https://cdn.lordicon.com/gigfpovs.json" : "https://cdn.lordicon.com/gigfpovs.json"}
+                                
+                            {user.savesId != '' ? user.savesId.includes(movie.id) ? <BookmarkSlashIcon id="si"  className='si'/> : <BookmarkIcon id="si"  className='si'/> : <BookmarkIcon id="si"  className='si'/>}
 
-                                    trigger="hover"
-                                    colors="primary:#fff"
-                                    id="si"></lord-icon>
+
 
                             </div>
 
